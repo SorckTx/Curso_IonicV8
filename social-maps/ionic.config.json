@@ -1,0 +1,7 @@
+{
+  "name": "social-maps",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
