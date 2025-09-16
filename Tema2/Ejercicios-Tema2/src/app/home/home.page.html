@@ -1,0 +1,24 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Tema 2 - Ejercicio 1
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<!-- ... -->
+<ion-content [fullscreen]="true">
+  <div id="container">
+    <ion-searchbar color="primary" search-icon="search-circle"></ion-searchbar>
+    <p *ngFor="let count of [0,1,2,3]">{{lipsum}}</p>
+
+    <ion-list>
+      <ion-item *ngFor="let pais of results">{{pais}}</ion-item>
+    </ion-list>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-searchbar [debounce]="2000" (ionInput)="handleInput($event)"></ion-searchbar>
+  </ion-toolbar>
+</ion-footer>

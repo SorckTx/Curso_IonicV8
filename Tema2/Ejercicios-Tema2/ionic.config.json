@@ -1,0 +1,7 @@
+{
+  "name": "Ejercicios-Tema2",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
