@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>feed</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-card *ngFor="let item of feedItems">
+    <img [hidden]="!item.image" [src]="item?.image" alt="Imagen post" />
+    <ion-card-header>
+      {{item.title || ''}}
+    </ion-card-header>
+    <ion-card-content [hidden]="!item.text">
+      {{item.text || ''}}
+    </ion-card-content>
+  </ion-card>
+</ion-content>
