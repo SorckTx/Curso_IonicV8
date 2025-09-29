@@ -14,14 +14,15 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
-  },  {
-    path: 'feed',
-    loadChildren: () => import('./pages/feed/feed.module').then( m => m.FeedPageModule)
   },
   {
-    path: 'contacts',
-    loadChildren: () => import('./pages/contacts/contacts.module').then( m => m.ContactsPageModule)
+    path: 'tabs',
+    loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
+  },  {
+    path: 'register',
+    loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
   },
+
 
 
 ];

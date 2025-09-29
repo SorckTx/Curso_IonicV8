@@ -1,0 +1,42 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>register</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="page_content">
+    <form>
+      <ion-list>
+        <ion-item>
+          <ion-input name="nombre" type="text" placeholder="Nombre" [(ngModel)]="nuevoUsuario.nombre">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input name="apellidos" type="text" placeholder="Apellidos" [(ngModel)]="nuevoUsuario.apellidos">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input name="email" type="email" placeholder="E-mail" [(ngModel)]="nuevoUsuario.email">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input name="provincia" type="text" placeholder="Provincia" [(ngModel)]="nuevoUsuario.provincia">
+          </ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-input name="ciudad" type="text" placeholder="Ciudad" [(ngModel)]="nuevoUsuario.ciudad">
+          </ion-input>
+        </ion-item>
+      </ion-list>
+    </form>
+  </div>
+
+  <ion-footer class="ion-text-center">
+    <ion-button (click)="crearCuenta($event)" type="submit">Crear cuenta</ion-button>
+  </ion-footer>
+</ion-content>

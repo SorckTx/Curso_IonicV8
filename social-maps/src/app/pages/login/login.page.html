@@ -13,13 +13,15 @@
           <form>
             <ion-list lines="none">
               <ion-item>
-                <ion-input type="text" placeholder="email@email.com" fill="outline" label="Nombre de usuario"
-                  labelPlacement="floating">
+                <ion-input placeholder="email@email.com" label-placement="floating" fill="outline" name="username"
+                  label="Nombre de usuario" type="text" [(ngModel)]="username">
                 </ion-input>
               </ion-item>
+
               <ion-item>
-                <ion-input type="password" placeholder="Password" fill="outline" label="Contraseña"
-                  labelPlacement="floating" [clearInput]="true"></ion-input>
+                <ion-input placeholder="********" label="Contraseña" label-placement="floating" fill="outline"
+                  name="password" [clearInput]="true" type="password" [(ngModel)]="password">
+                </ion-input>
               </ion-item>
             </ion-list>
           </form>
@@ -27,7 +29,12 @@
       </ion-row>
       <ion-row>
         <ion-col class="ion-text-center">
-          <ion-button (click)="login()">Login</ion-button>
+          <ion-button (click)="login($event)" type="submit">Login</ion-button>
+        </ion-col>
+      </ion-row>`
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <a class="forgot-btn" (click)="recuperarPassword()">¿Olvidaste tu contraseña?</a>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -40,5 +47,5 @@
 </ion-content>
 
 <ion-footer class="ion-text-center">
-  <ion-button routerLink="registro" fill="outline">Regístrate</ion-button>
+  <ion-button routerLink="/register" fill="outline">Regístrate</ion-button>
 </ion-footer>
