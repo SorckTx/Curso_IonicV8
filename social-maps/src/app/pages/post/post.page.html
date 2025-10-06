@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>{{isNew ? 'Nuevo Post' : 'Editar Post'}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="page_content">
+    <form (ngSubmit)="procesar()" [formGroup]="form" id="ngform">
+      <ion-list>
+        <ion-item>
+          <ion-input formControlName="titulo" label="Título" type="text"></ion-input>
+          <ion-note *ngIf="form.get('titulo')?.touched && form.get('titulo')?.hasError('required')">Este campo es
+            obligatorio!</ion-note>
+        </ion-item>
+        <ion-item>
+          <div class="image-video-picker">
+            Toca aquí para agregar una imágen/vídeo
+          </div>
+        </ion-item>
+        <ion-item>
+          <ion-input formControlName="descripcion" label="Descripción" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-select formControlName="contactos" [multiple]="true" label="Etiquetar contactos">
+            <ion-select-option></ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </form>
+  </div>
+</ion-content>
+<ion-footer class="ion-text-center">
+  <ion-button type="submit" form="ngform">{{isNew ? 'Crear' : 'Guardar Cambios'}}</ion-button>
+</ion-footer>

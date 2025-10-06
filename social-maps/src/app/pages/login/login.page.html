@@ -14,14 +14,18 @@
             <ion-list lines="none">
               <ion-item>
                 <ion-input placeholder="email@email.com" label-placement="floating" fill="outline" name="username"
-                  label="Nombre de usuario" type="text" [(ngModel)]="username">
+                  label="Nombre de usuario" type="text" formControlName="username">
                 </ion-input>
+                <ion-note *ngIf="form.get('username')?.touched && form.get('username')?.hasError('required')">El nombre
+                  de usuario es obligatorio!</ion-note>
               </ion-item>
 
               <ion-item>
                 <ion-input placeholder="********" label="Contraseña" label-placement="floating" fill="outline"
-                  name="password" [clearInput]="true" type="password" [(ngModel)]="password">
+                  name="password" [clearInput]="true" type="password" formControlName="password">
                 </ion-input>
+                <ion-note *ngIf="form.get('password')?.touched && form.get('password')?.hasError('required')">La
+                  contraseña es obligatoria!</ion-note>
               </ion-item>
             </ion-list>
           </form>
@@ -29,7 +33,7 @@
       </ion-row>
       <ion-row>
         <ion-col class="ion-text-center">
-          <ion-button (click)="login($event)" type="submit">Login</ion-button>
+          <ion-button for="ngForm" type="submit">Login</ion-button>
         </ion-col>
       </ion-row>`
       <ion-row>
@@ -40,10 +44,6 @@
     </ion-grid>
 
   </div>
-
-  <ion-infinite-scroll (ionInfinite)="onIonInfinite($event)">
-    <ion-infinite-scroll-content></ion-infinite-scroll-content>
-  </ion-infinite-scroll>
 </ion-content>
 
 <ion-footer class="ion-text-center">

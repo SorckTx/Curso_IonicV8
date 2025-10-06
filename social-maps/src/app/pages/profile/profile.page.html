@@ -3,11 +3,102 @@
     <ion-title>profile</ion-title>
   </ion-toolbar>
 </ion-header>
-
+<!-- ... -->
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">profile</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="page_content">
+    <h4>Perfil de usuario</h4>
+    <form (ngSubmit)="procesar()" [formGroup]="form">
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            Imagen de perfil
+          </ion-col>
+          <ion-col>
+            <ion-list>
+              <ion-item>
+                <ion-input formControlName="nombre" label-placement="floating" type="text" label="Nombre"></ion-input>
+                <ion-note *ngIf="form.get('nombre')?.touched && form.get('nombre')?.hasError('required')">Este campo es
+                  obligatorio!</ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-input formControlName="apellidos" label-placement="floating" type="text"
+                  label="Apellidos"></ion-input>
+                <ion-note *ngIf="form.get('apellidos')?.touched && form.get('apellidos')?.hasError('required')">Este
+                  campo es
+                  obligatorio!</ion-note>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-list>
+              <ion-item>
+                <ion-input label="Fecha de nacimiento" label-placement="floating"
+                  value="{{ form.get('fechaNacimiento')?.value | date: 'dd/MM/yyyy' }}"
+                  id="fecha-nacimiento"></ion-input>
+                <ion-popover trigger="fecha-nacimiento" size="cover">
+                  <ng-template>
+                    <ion-datetime presentation="date" [preferWheel]="true"
+                      formControlName="fechaNacimiento"></ion-datetime>
+                  </ng-template>
+                </ion-popover>
+              </ion-item>
+              <ion-item>
+                <ion-select formControlName="sexo" label-placement="floating" label="Sexo" placeholder="Sexo">
+                  <ion-select-option value="h">Hombre</ion-select-option>
+                  <ion-select-option value="m">Mujer</ion-select-option>
+                  <ion-select-option value="o">Otros</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-item>
+                <ion-input type="email" formControlName="email" label-placement="floating" label="E-mail"
+                  placeholder="tu@email.com"></ion-input>
+                <ion-note *ngIf="form.get('email')?.touched && form.get('email')?.hasError('required')">Este campo es
+                  obligatorio!</ion-note>
+              </ion-item>
+              <ion-item>
+                <ion-input type="tel" formControlName="telefono" label-placement="floating" label="Teléfono"
+                  placeholder="654098765"></ion-input>
+              </ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-text-center">
+            <ion-button type="submit">Actualizar Datos</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+    <h4>Cambiar Contraseña</h4>
+    <!-- Nota que no le asignamos un id al formulario.
+       Esto es porque el botón está dentro de la etiqueta form.
+       Si estuviese fuera, deberíafmos forzar la relación.
+       Asignamos el evento submit a cambiarClave -->
+    <form (ngSubmit)="cambiarClave()" [formGroup]="formPwd">
+      <ion-list>
+        <ion-item>
+          <ion-input type="password" formControlName="password" label-placement="floating"
+            label="Contraseña actual"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input type="password" formControlName="newPassword" label-placement="floating"
+            label="Nueva contraseña"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input type="password" formControlName="newPasswordConfirm" label-placement="floating"
+            label="Confirmar nueva contraseña"></ion-input>
+        </ion-item>
+      </ion-list>
+      <ion-grid>
+        <!-- Y agregamos un botón a parte para enviar los datos del cambio de contraseña -->
+        <ion-row>
+          <ion-col class="ion-text-center ion-margin-bottom">
+            <ion-button type="submit">Cambiar Contraseña</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </div>
 </ion-content>

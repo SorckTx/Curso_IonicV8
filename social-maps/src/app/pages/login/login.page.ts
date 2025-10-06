@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { AlertController, ToastController } from '@ionic/angular';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -9,14 +10,12 @@ import { AlertController, ToastController } from '@ionic/angular';
   standalone: false,
 })
 export class LoginPage implements OnInit {
-  username: string = '';
-  password: string = '';
 
-  usuario: any = {
-    username: 'yepa@unmail.com',
-    password: '1234',
-  };
-  constructor(private router: Router, private alertCtrl: AlertController, private toastCtrl: ToastController) {
+  public form: FormGroup = this.formBuilder.group({
+    username: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
+  });
+  constructor(private router: Router, private alertCtrl: AlertController, private toastCtrl: ToastController, private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
@@ -53,25 +52,21 @@ export class LoginPage implements OnInit {
   }
 
   login(event: Event) {
-    event.preventDefault();
-    if (this.username === this.usuario.username && this.password === this.usuario.password) {
-      this.router.navigate(['/tabs']);
-    } else {
-      alert('Credenciales incorrectas!');
+    if (this.form.invalid) {
+      return;
     }
+    this.router.navigate(['tabs']);
   }
 
   async successToast(message: string): Promise<void> {
     const toast: HTMLIonToastElement = await this.toastCtrl.create({
       message,
+      duration: 5000,
     });
     await toast.present();
   }
 
-  onIonInfinite(event: CustomEvent) {
-    // Simula carga y completa el infinite scroll
-    setTimeout(() => {
-      (event.target as HTMLIonInfiniteScrollElement).complete();
-    }, 300);
+  registro() {
+    this.router.navigate(['register']);
   }
 }
