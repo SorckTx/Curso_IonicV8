@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastController } from "@ionic/angular";
+import { PostFacades } from 'src/app/facades/post.facade';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-post',
@@ -11,7 +13,7 @@ import { ToastController } from "@ionic/angular";
 export class PostPage implements OnInit {
   public isNew: boolean = true;
   public form: FormGroup = this.formBuilder.group({
-    id: new FormControl(null, []),
+    id: new FormControl(undefined),
     titulo: new FormControl('', [Validators.required]),
     descripcion: new FormControl('', [Validators.required]),
     contactos: new FormControl('', []),
@@ -20,6 +22,7 @@ export class PostPage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private toastCtrl: ToastController,
+    private postFacades: PostFacades
   ) { }
 
   ngOnInit() {
@@ -44,18 +47,40 @@ export class PostPage implements OnInit {
   }
 
   private async crearPost() {
-    const toast = await this.toastCtrl.create({
-      message: `Post creado exitosamente!`,
-      duration: 5000,
-    });
-    await toast.present();
+    const post = this.form.value;
+    this.postFacades.create(post).pipe(
+      take(1),
+    ).subscribe(async (success) => {
+      const toast = await this.toastCtrl.create({
+        message: `Post creado exitosamente!`,
+        duration: 5000,
+      });
+      await toast.present();
+    }, async (error) => {
+      const toast = await this.toastCtrl.create({
+        message: `Hubo un error al crear el post, intentalo nuevamente.`,
+        duration: 5000,
+      });
+      await toast.present();
+    })
   }
 
   private async actualizarPost() {
-    const toast = await this.toastCtrl.create({
-      message: `Post actualizado exitosamente!`,
-      duration: 5000,
-    });
-    await toast.present();
+    const post = this.form.value;
+    this.postFacades.update(post).pipe(
+      take(1),
+    ).subscribe(async (success) => {
+      const toast = await this.toastCtrl.create({
+        message: `Post actualizado exitosamente!`,
+        duration: 5000,
+      });
+      await toast.present();
+    }, async (error) => {
+      const toast = await this.toastCtrl.create({
+        message: `Hubo un error al actualizar el post, intentalo nuevamente.`,
+        duration: 5000,
+      });
+      await toast.present();
+    })
   }
 }

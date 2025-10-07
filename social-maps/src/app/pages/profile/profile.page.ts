@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { UsersFacade } from '../../facades/users.facade';
 import { ToastController } from '@ionic/angular';
+import { take } from 'rxjs/operators'
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
@@ -29,9 +31,13 @@ export class ProfilePage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private toastCtrl: ToastController,
+    private usersFacade: UsersFacade
   ) { }
 
   ngOnInit() {
+    this.form.get('email')?.disable();
+    this.form.get('nombre')?.setValue('Kevin');
+    this.form.get('email')?.setValue('kevin@gmail.com');
   }
 
   public async procesar() {
@@ -44,12 +50,22 @@ export class ProfilePage implements OnInit {
       await toast.present();
       return;
     }
-    // Mostramos mensaje en caso de exito
-    const toast = await this.toastCtrl.create({
-      message: `Datos del perfil actualizados correctamente.`,
-      duration: 5000,
-    });
-    await toast.present();
+    const users = this.form.value;
+    this.usersFacade.update(users).pipe(
+      take(1),
+    ).subscribe(async (success) => {
+      const toast = await this.toastCtrl.create({
+        message: `Datos del perfil actualizados correctamente.`,
+        duration: 5000,
+      });
+      await toast.present();
+    }, async (error) => {
+      const toast = await this.toastCtrl.create({
+        message: `Hubo un error, intentalo nuevamente.`,
+        duration: 5000,
+      });
+      await toast.present();
+    })
   }
 
   public async cambiarClave() {

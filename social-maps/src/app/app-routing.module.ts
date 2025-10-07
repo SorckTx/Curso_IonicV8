@@ -18,13 +18,14 @@ const routes: Routes = [
   {
     path: 'tabs',
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
-  },  {
+  },
+  {
     path: 'register',
-    loadChildren: () => import('./pages/register/register.module').then( m => m.RegisterPageModule)
+    loadChildren: () => import('./pages/register/register.module').then(m => m.RegisterPageModule)
   },
   {
     path: 'post',
-    loadChildren: () => import('./pages/post/post.module').then( m => m.PostPageModule)
+    loadChildren: () => import('./pages/post/post.module').then(m => m.PostPageModule)
   },
 
 
