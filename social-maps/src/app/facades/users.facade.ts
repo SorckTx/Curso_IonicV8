@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UsersRequest } from "../requests/users.request";
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -35,7 +36,15 @@ export class UsersFacade {
     return this.request.signup({ email, password });
   }
 
+  login(email: string, password: string): Observable<any> {
+    return this.request.login(email, password);
+  }
+
   delete(id: number) {
     return this.request.delete(id);
+  }
+
+  checkUserExists(email: string): Observable<boolean> {
+    return this.request.checkUserExists(email);
   }
 }

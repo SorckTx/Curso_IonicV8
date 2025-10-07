@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UsersFacade } from '../../facades/users.facade';
+import { UsernameValidator } from '../../validators/username.validator';
 
 @Component({
   selector: 'app-register',
@@ -20,6 +21,8 @@ export class RegisterPage implements OnInit {
     provincia: new FormControl('', []),
     ciudad: new FormControl('', []),
     edad: new FormControl('', []),
+  }, {
+    validators: UsernameValidator.usernameExists('email', this.usersFacade)
   });
 
   constructor(private router: Router, private toastCtrl: ToastController, private formBuilder: FormBuilder, private usersFacade: UsersFacade) { }

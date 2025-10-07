@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { AlertController, ToastController } from '@ionic/angular';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { UsersFacade } from '../../facades/users.facade';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +17,13 @@ export class LoginPage implements OnInit {
     username: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
   });
-  constructor(private router: Router, private alertCtrl: AlertController, private toastCtrl: ToastController, private formBuilder: FormBuilder) {
+  constructor(
+    private router: Router,
+    private alertCtrl: AlertController,
+    private toastCtrl: ToastController,
+    private formBuilder: FormBuilder,
+    private usersFacade: UsersFacade
+  ) {
   }
 
   ngOnInit() {
@@ -55,7 +63,13 @@ export class LoginPage implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    this.router.navigate(['tabs']);
+    this.usersFacade.login(this.form.get('email')?.value, this.form.get('password')?.value).pipe(
+      take(1),
+    ).subscribe((usuario): void => {
+      this.router.navigate(['tabs']);
+    }, async (error) => {
+      await this.successToast('Usuario o contraseña incorrectos');
+    });
   }
 
   async successToast(message: string): Promise<void> {
