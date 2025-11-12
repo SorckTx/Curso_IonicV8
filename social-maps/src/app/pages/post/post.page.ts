@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms"
 import { ToastController } from "@ionic/angular";
 import { PostFacades } from 'src/app/facades/post.facade';
 import { take } from 'rxjs/operators';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-post',
@@ -18,6 +19,8 @@ export class PostPage implements OnInit {
     descripcion: new FormControl('', [Validators.required]),
     contactos: new FormControl('', []),
     multimedia: new FormControl('', []),
+    lat: new FormControl(0, []),
+    lng: new FormControl(0, []),
   });
   constructor(
     private formBuilder: FormBuilder,
@@ -39,6 +42,9 @@ export class PostPage implements OnInit {
       await toast.present();
       return;
     }
+    const posicion = await Geolocation.getCurrentPosition();
+    this.form.get('lat')?.setValue(posicion.coords.latitude);
+    this.form.get('lng')?.setValue(posicion.coords.longitude);
     // Caso contrario, dependiendo si estamos en modo "crear", vamos al método
     // a cargo del flujo de creación
     if (this.isNew) this.crearPost();
