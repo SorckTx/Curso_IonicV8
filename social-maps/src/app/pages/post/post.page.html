@@ -14,8 +14,18 @@
             obligatorio!</ion-note>
         </ion-item>
         <ion-item>
-          <div class="image-video-picker">
-            Toca aquí para agregar una imágen/vídeo
+          <div class="image-picker">
+            <ion-button (click)="tomarFoto()">
+              <ion-icon icon="camera-outline"></ion-icon>
+            </ion-button>
+          </div>
+          <div class="image-picker">
+            <!-- Y el elemento a cargo de capturar el vídeo -->
+            <input type="file" style="visibility: hidden" (change)="guardarVideo($event)" #video name="video"
+              accept="video/*" capture="environment">
+            <ion-button (click)="tomarFoto()">
+              <ion-icon icon="camera-outline"></ion-icon>
+            </ion-button>
           </div>
         </ion-item>
         <ion-item>

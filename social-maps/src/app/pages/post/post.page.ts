@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastController } from "@ionic/angular";
 import { PostFacades } from 'src/app/facades/post.facade';
 import { take } from 'rxjs/operators';
 import { Geolocation } from '@capacitor/geolocation';
+import { CamaraService } from 'src/app/services/camara.service';
 
 @Component({
   selector: 'app-post',
@@ -12,6 +13,7 @@ import { Geolocation } from '@capacitor/geolocation';
   standalone: false,
 })
 export class PostPage implements OnInit {
+  @ViewChild('video') videoInput!: ElementRef;
   public isNew: boolean = true;
   public form: FormGroup = this.formBuilder.group({
     id: new FormControl(undefined),
@@ -25,7 +27,8 @@ export class PostPage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private toastCtrl: ToastController,
-    private postFacades: PostFacades
+    private postFacades: PostFacades,
+    private camaraSvc: CamaraService
   ) { }
 
   ngOnInit() {
@@ -88,5 +91,33 @@ export class PostPage implements OnInit {
       });
       await toast.present();
     })
+  }
+
+  public async tomarFoto() {
+    // Tomamos la foto
+    const foto = await this.camaraSvc.tomarFoto();
+    // La guardamos en el dispositivo
+    const fotoGuardada = await this.camaraSvc.guardarFoto(foto);
+    // Tomamos el listado de elementos multimedia
+    const multimedia = this.form.get('multimedia')?.value;
+    // Agregamos nuestra foto
+    multimedia.push(fotoGuardada);
+    // Y pisamos el valor de multimedia con la nueva foto añadida
+    this.form.get('multimedia')?.setValue(multimedia);
+  }
+
+  public async tomarVideo() {
+    this.videoInput.nativeElement.click();
+  }
+
+  public async guardarVideo(evento: any) {
+    const archivos = evento.currentTarget.files;
+    if (archivos.length) {
+      const video = archivos[0];
+      const videoGuardado = await this.camaraSvc.guardarVideo(video);
+      const multimedia = this.form.get('multimedia')?.value;
+      multimedia.push(videoGuardado);
+      this.form.get('multimedia')?.setValue(multimedia);
+    }
   }
 }

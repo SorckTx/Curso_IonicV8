@@ -1,0 +1,16 @@
+<ion-content [fullscreen]="true">
+  <div id="container">
+    <ion-button (click)="escanearCodigo()">
+      <ion-icon icon="qr-code-outline"></ion-icon> Escanear
+    </ion-button>
+
+    <ion-card *ngIf="scannedCode">
+      <ion-card-header>
+        Código escaneado
+      </ion-card-header>
+      <ion-card-content>
+        <ion-label>{{scannedCode}}</ion-label>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
