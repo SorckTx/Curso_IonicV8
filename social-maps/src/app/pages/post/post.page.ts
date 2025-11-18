@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastController } from "@ionic/angular";
-import { PostFacades } from 'src/app/facades/post.facade';
+import { PostsFacade } from 'src/app/facades/post.facade';
 import { take } from 'rxjs/operators';
 import { Geolocation } from '@capacitor/geolocation';
 import { CamaraService } from 'src/app/services/camara.service';
@@ -27,7 +27,7 @@ export class PostPage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private toastCtrl: ToastController,
-    private postFacades: PostFacades,
+    private postFacades: PostsFacade,
     private camaraSvc: CamaraService
   ) { }
 

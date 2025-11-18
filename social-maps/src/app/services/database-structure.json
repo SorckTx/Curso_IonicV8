@@ -31,8 +31,8 @@
                     "value": "TEXT"
                 },
                 {
-                    "column": "edad",
-                    "value": "INTEGER"
+                    "column": "fechaNacimiento",
+                    "value": "TEXT"
                 }
             ]
         },

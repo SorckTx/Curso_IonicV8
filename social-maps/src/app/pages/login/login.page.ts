@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { AlertController, ToastController } from '@ionic/angular';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UsersFacade } from '../../facades/users.facade';
-import { take } from 'rxjs';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +22,8 @@ export class LoginPage implements OnInit {
     private alertCtrl: AlertController,
     private toastCtrl: ToastController,
     private formBuilder: FormBuilder,
-    private usersFacade: UsersFacade
+    private usersFacade: UsersFacade,
+    private authService: AuthService
   ) {
   }
 
@@ -59,28 +60,31 @@ export class LoginPage implements OnInit {
     await alert.present();
   }
 
-  login(event: Event) {
+  async login() {
     if (this.form.invalid) {
+      await this.successToast('Los datos en el formulario son incorrectos/incompletos.');
       return;
     }
-    this.usersFacade.login(this.form.get('email')?.value, this.form.get('password')?.value).pipe(
-      take(1),
-    ).subscribe((usuario): void => {
-      this.router.navigate(['tabs']);
-    }, async (error) => {
-      await this.successToast('Usuario o contraseña incorrectos');
-    });
+    try {
+      const usuarioLogueado = await this.authService.login(this.form.get('username')?.value, this.form.get('password')?.value);
+      usuarioLogueado.subscribe(usuario => {
+        this.router.navigate(['tabs']);
+      });
+    } catch (e) {
+      await this.successToast('Credenciales incorrectas. Por favor revise sus credenciales y vuelva a intentarlo.');
+    }
   }
 
-  async successToast(message: string): Promise<void> {
-    const toast: HTMLIonToastElement = await this.toastCtrl.create({
+  async successToast(message: string) {
+    const toast = await this.toastCtrl.create({
       message,
-      duration: 5000,
+      duration: 5000
     });
     await toast.present();
   }
 
   registro() {
-    this.router.navigate(['register']);
+    this.router.navigate(['registro']);
   }
 }
+

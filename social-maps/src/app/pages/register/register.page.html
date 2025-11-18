@@ -50,6 +50,14 @@
         </ion-item>
 
         <ion-item>
+          <ion-input formControlName="ciudad" type="text" placeholder="Ciudad"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Fecha de Nacimiento</ion-label>
+          <ion-datetime formControlName="fechaNacimiento" presentation="month-year-day"></ion-datetime>
+        </ion-item>
+
+        <ion-item>
           <ion-input formControlName="password" type="password" placeholder="Contraseña"></ion-input>
           <ion-note *ngIf="form.get('password')?.touched && form.get('password')?.hasError('required')">Este campo es
             obligatorio</ion-note>

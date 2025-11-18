@@ -1,47 +1,41 @@
 import { Injectable } from '@angular/core';
 import { UsersRequest } from "../requests/users.request";
-import { Observable } from 'rxjs';
+import { from, Observable } from "rxjs";
+import { UserModel } from "../models/user.models";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsersFacade {
-  // Importamos el singleton de UsersRequest
+
   constructor(private request: UsersRequest) { }
-  // Y agregamos un método para cada operación
-  query() {
+
+  query(): Observable<UserModel[]> {
     return this.request.query();
-    /*
-     * En la Facade, pudiésemos pre procesar datos con un pipe en el 
-     * observable de la petición.
-     * De modo que el procesamiento(digestión) de la información
-     * no se realiza en el componente, sino en la fachada
-     * */
   }
 
-  get(id: number) {
+  get(id: string): Observable<UserModel> {
     return this.request.get(id);
   }
 
-  update(user: any) {
-    return this.request.update(user);
+  update(user: UserModel) {
+    return from(this.request.update(user));
   }
 
-
-  create(user: any) {
-    return this.request.create(user);
+  create(user: UserModel) {
+    return from(this.request.create(user));
   }
 
   signup(email: string, password: string) {
     return this.request.signup({ email, password });
   }
 
-  login(email: string, password: string): Observable<any> {
+  login(email: string, password: string): Observable<UserModel> {
     return this.request.login(email, password);
   }
 
-  delete(id: number) {
-    return this.request.delete(id);
+  delete(id: string) {
+    return from(this.request.delete(id));
   }
 
   checkUserExists(email: string): Observable<boolean> {

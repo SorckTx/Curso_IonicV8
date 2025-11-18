@@ -3,13 +3,13 @@ import { from, map, Observable } from "rxjs";
 import { NetworkService } from "../services/network.service";
 import { CachingService } from "../services/caching.service";
 import { collection, collectionData, deleteDoc, doc, docSnapshots, Firestore, setDoc } from "@angular/fire/firestore";
-import { PostModel } from "../models/post.medal";
+import { EtiquetaModel } from "../models/etiqueta.model";
 
 @Injectable({
     providedIn: 'root'
 })
-export class PostsRequest {
-    private NOMBRE_COLECCION: string = 'posts';
+export class EtiquetasRequest {
+    private NOMBRE_COLECCION: string = 'etiquetas';
     constructor(
         private networkSvc: NetworkService,
         private cachingSvc: CachingService,
@@ -23,7 +23,7 @@ export class PostsRequest {
             return collectionData(coleccion, { idField: 'id' }).pipe(
                 map(respuesta => {
                     this.cachingSvc.cacheRequest(this.NOMBRE_COLECCION, 'get', respuesta);
-                    return respuesta as PostModel[];
+                    return respuesta as EtiquetaModel[];
                 }),
             );
         } else {
@@ -38,7 +38,7 @@ export class PostsRequest {
                 map(doc => {
                     const id = doc.id;
                     const data = doc.data();
-                    const resultado = { id, ...data } as PostModel;
+                    const resultado = { id, ...data } as EtiquetaModel;
                     this.cachingSvc.cacheRequest(`${this.NOMBRE_COLECCION}/${id}`, 'get', resultado);
                     return resultado;
                 })
@@ -48,14 +48,14 @@ export class PostsRequest {
         }
     }
 
-    create(post: PostModel) {
+    create(etiqueta: EtiquetaModel) {
         const documento = doc(collection(this.firestore, this.NOMBRE_COLECCION));
-        return setDoc(documento, post);
+        return setDoc(documento, etiqueta);
     }
 
-    update(post: any) {
-        const documento = doc(this.firestore, `${this.NOMBRE_COLECCION}/${post.id!}`);
-        const { id, ...data } = post;
+    update(etiqueta: any) {
+        const documento = doc(this.firestore, `${this.NOMBRE_COLECCION}/${etiqueta.id!}`);
+        const { id, ...data } = etiqueta;
         return setDoc(documento, data);
     }
 
