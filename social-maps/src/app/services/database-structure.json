@@ -1,0 +1,149 @@
+{
+    "version": 1,
+    "encrypted": false,
+    "mode": "full",
+    "tables": [
+        {
+            "name": "usuarios",
+            "schema": [
+                {
+                    "column": "id",
+                    "value": "INTEGER PRIMARY KEY NOT NULL"
+                },
+                {
+                    "column": "nombre",
+                    "value": "TEXT NOT NULL"
+                },
+                {
+                    "column": "apellidos",
+                    "value": "TEXT NOT NULL"
+                },
+                {
+                    "column": "email",
+                    "value": "TEXT NOT NULL"
+                },
+                {
+                    "column": "provincia",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "ciudad",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "edad",
+                    "value": "INTEGER"
+                }
+            ]
+        },
+        {
+            "name": "posts",
+            "schema": [
+                {
+                    "column": "id",
+                    "value": "INTEGER PRIMARY KEY NOT NULL"
+                },
+                {
+                    "column": "titulo",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "descripcion",
+                    "value": "TEXT"
+                },
+                {
+                    "column": "lat",
+                    "value": "REAL NOT NULL"
+                },
+                {
+                    "column": "lng",
+                    "value": "REAL NOT NULL"
+                }
+            ]
+        },
+        {
+            "name": "etiquetas",
+            "schema": [
+                {
+                    "column": "id",
+                    "value": "INTEGER PRIMARY KEY NOT NULL"
+                },
+                {
+                    "column": "postId",
+                    "value": "INTEGER NOT NULL"
+                },
+                {
+                    "column": "userId",
+                    "value": "INTEGER NOT NULL"
+                },
+                {
+                    "column": "contactId",
+                    "value": "INTEGER NOT NULL"
+                }
+            ]
+        },
+        {
+            "name": "media",
+            "schema": [
+                {
+                    "column": "id",
+                    "value": "INTEGER PRIMARY KEY NOT NULL"
+                },
+                {
+                    "column": "postId",
+                    "value": "INTEGER NOT NULL"
+                },
+                {
+                    "column": "nombreArchivo",
+                    "value": "TEXT NOT NULL"
+                },
+                {
+                    "column": "archivo",
+                    "value": "TEXT NOT NULL"
+                }
+            ]
+        },
+        {
+            "name": "contactos",
+            "schema": [
+                {
+                    "column": "id",
+                    "value": "INTEGER PRIMARY KEY NOT NULL"
+                },
+                {
+                    "column": "userId",
+                    "value": "INTEGER NOT NULL"
+                },
+                {
+                    "column": "contactId",
+                    "value": "INTEGER NOT NULL"
+                }
+            ]
+        },
+        {
+            "name": "http_cache_requests",
+            "schema": [
+                {
+                    "column": "id",
+                    "value": "INTEGER PRIMARY KEY NOT NULL"
+                },
+                {
+                    "column": "url",
+                    "value": "TEXT NOT NULL"
+                },
+                {
+                    "column": "verbo",
+                    "value": "TEXT NOT NULL"
+                },
+                {
+                    "column": "data",
+                    "value": "TEXT NOT NULL"
+                },
+                {
+                    "column": "expires_in",
+                    "value": "INTEGER NOT NULL"
+                }
+            ]
+        }
+    ]
+}

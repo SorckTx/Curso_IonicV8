@@ -1,17 +1,21 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { from, map, Observable } from 'rxjs';
-import { NetworkService } from '../services/network.service';
-import { CachingService } from '../services/caching.service';
-
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { NetworkService } from "./network.service";
+import { CachingService } from "./caching.service";
 
 @Injectable({
     providedIn: 'root'
 })
-export class PostRequest {
+export class PostsRequest {
     private baseUrl: string = 'api/posts';
-
-    constructor(private http: HttpClient, private networkSvc: NetworkService, private cachingSvc: CachingService) { }
+    constructor(
+        private http: HttpClient,
+        private networkSvc: NetworkService,
+        private cachingSvc: CachingService,
+    ) {
+    }
 
     query(): Observable<any> {
         if (this.networkSvc.internetConnected.getValue()) {
@@ -27,9 +31,11 @@ export class PostRequest {
     }
 
     get(id: number): Observable<any> {
+        return this.http.get(`${this.baseUrl}/${id}`);
+
         if (this.networkSvc.internetConnected.getValue()) {
             return this.http.get(`${this.baseUrl}/${id}`).pipe(
-                map(async (respuesta) => {
+                map((respuesta) => {
                     this.cachingSvc.cacheRequest(`${this.baseUrl}/${id}`, 'get', respuesta);
                     return respuesta;
                 })
@@ -37,17 +43,5 @@ export class PostRequest {
         } else {
             return from(this.cachingSvc.getCachedRequest(`${this.baseUrl}/${id}`, 'get'));
         }
-    }
-
-    create(post: any): Observable<any> {
-        return this.http.post(`${this.baseUrl}`, post);
-    }
-
-    update(post: any): Observable<any> {
-        return this.http.put(`${this.baseUrl}/${post.id}`, post);
-    }
-
-    delete(id: number): Observable<any> {
-        return this.http.delete(`${this.baseUrl}/${id}`);
     }
 }
