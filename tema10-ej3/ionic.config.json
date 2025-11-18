@@ -1,0 +1,7 @@
+{
+  "name": "tema10-ej3",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
