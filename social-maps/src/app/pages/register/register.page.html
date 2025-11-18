@@ -6,7 +6,7 @@
 
 <ion-content [fullscreen]="true">
   <div class="page_content">
-    <form>
+    <form [formGroup]="form" (ngSubmit)="crearCuenta($event)">
       <ion-list>
         <ion-item>
           <ion-input name="nombre" type="text" placeholder="Nombre" formControlName="nombre">
@@ -42,16 +42,6 @@
           <ion-note *ngIf="form.get('ciudad')?.touched && form.get('ciudad')?.hasError('required')">La ciudad es
             obligatoria!</ion-note>
         </ion-item>
-
-        <ion-item>
-          <ion-input formControlName="email" type="email" placeholder="E-mail"></ion-input>
-          <ion-note *ngIf="form.get('email')?.touched && form.get('email')?.hasError('required')">Este campo es
-            obligatorio</ion-note>
-        </ion-item>
-
-        <ion-item>
-          <ion-input formControlName="ciudad" type="text" placeholder="Ciudad"></ion-input>
-        </ion-item>
         <ion-item>
           <ion-label>Fecha de Nacimiento</ion-label>
           <ion-datetime formControlName="fechaNacimiento" presentation="month-year-day"></ion-datetime>
@@ -63,10 +53,9 @@
             obligatorio</ion-note>
         </ion-item>
       </ion-list>
+      <ion-footer class="ion-text-center">
+        <ion-button type="submit">Crear cuenta</ion-button>
+      </ion-footer>
     </form>
   </div>
-
-  <ion-footer class="ion-text-center">
-    <ion-button for="ngForm" type="submit">Crear cuenta</ion-button>
-  </ion-footer>
 </ion-content>
