@@ -53,6 +53,10 @@ export class PostsRequest {
         return setDoc(documento, post);
     }
 
+    createId(): string {
+        return doc(collection(this.firestore, '_')).id;
+    }
+
     update(post: any) {
         const documento = doc(this.firestore, `${this.NOMBRE_COLECCION}/${post.id!}`);
         const { id, ...data } = post;

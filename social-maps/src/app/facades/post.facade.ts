@@ -26,6 +26,10 @@ export class PostsFacade {
         return from(this.request.update(post));
     }
 
+    crearId(): string {
+        return this.request.createId();
+    }
+
     delete(id: string): Observable<void> {
         return from(this.request.delete(id));
     }

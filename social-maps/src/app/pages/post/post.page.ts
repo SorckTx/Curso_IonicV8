@@ -2,9 +2,18 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { ToastController } from "@ionic/angular";
 import { PostsFacade } from 'src/app/facades/post.facade';
-import { take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { Geolocation } from '@capacitor/geolocation';
 import { CamaraService } from 'src/app/services/camara.service';
+import { UserModel } from 'src/app/models/user.models';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
+import { EtiquetasFacade } from 'src/app/facades/etiquetas.facade';
+import { MediaFacade } from 'src/app/facades/media.facade';
+import { UsersFacade } from 'src/app/facades/users.facade';
+import { ContactosFacade } from 'src/app/facades/contactos.facade';
+import { PostModel } from 'src/app/models/post.medal';
+import { ContactoModel } from 'src/app/models/contacto.model';
 
 @Component({
   selector: 'app-post',
@@ -14,6 +23,8 @@ import { CamaraService } from 'src/app/services/camara.service';
 })
 export class PostPage implements OnInit {
   @ViewChild('video') videoInput!: ElementRef;
+  public contactos: any[] = [];
+  public usuarios: UserModel[] = [];
   public isNew: boolean = true;
   public form: FormGroup = this.formBuilder.group({
     id: new FormControl(undefined),
@@ -27,11 +38,30 @@ export class PostPage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private toastCtrl: ToastController,
-    private postFacades: PostsFacade,
-    private camaraSvc: CamaraService
+    private postsFacade: PostsFacade,
+    private camaraSvc: CamaraService,
+    private contactosFacade: ContactosFacade,
+    private usersFacade: UsersFacade,
+    private etiquetasFacade: EtiquetasFacade,
+    private mediaFacade: MediaFacade,
+    private authService: AuthService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
+    this.usersFacade.query().pipe(
+      map(usuarios => {
+        this.usuarios = usuarios;
+        this.contactosFacade.query().pipe(
+          map(contactos => {
+            this.contactos = contactos.map(contacto => {
+              const usuario = this.usuarios.find(u => u.id === contacto.contactId);
+              return { ...contacto, nombre: `${usuario!.nombre} ${usuario!.apellidos}` }
+            })
+          }),
+        );
+      })
+    );
   }
 
   public async procesar() {
@@ -56,18 +86,47 @@ export class PostPage implements OnInit {
   }
 
   private async crearPost() {
-    const post = this.form.value;
-    this.postFacades.create(post).pipe(
+    const user: UserModel = this.authService.user$.getValue()!;
+    const post: PostModel = {
+      ...this.form.value,
+      // Asignamos un id al azar
+      id: this.postsFacade.crearId(),
+    };
+    // Creamos el post
+    this.postsFacade.create(post).pipe(
       take(1),
     ).subscribe(async (success) => {
+      // Si hay etiquetas, las creamos
+      if (this.form.get('contactos')?.value) {
+        this.form.get('contactos')?.value.forEach(async (contacto: ContactoModel) => {
+          this.etiquetasFacade.create({
+            contactId: contacto.id!,
+            postId: post.id!,
+            userId: user.id!,
+          });
+        });
+      }
+      // Si hay archivos, los subimos
+      if (this.form.get('multimedia')?.value) {
+        this.form.get('multimedia')?.value.forEach(async (media: any) => {
+          this.mediaFacade.create({
+            nombreArchivo: media.fileName,
+            archivo: media,
+            postId: post.id!,
+          });
+        });
+      }
+      // Mostramos un toast de exito
       const toast = await this.toastCtrl.create({
         message: `Post creado exitosamente!`,
         duration: 5000,
       });
+      // Redirigimos al mapa
+      this.router.navigate(['tabs', 'map'])
       await toast.present();
     }, async (error) => {
       const toast = await this.toastCtrl.create({
-        message: `Hubo un error al crear el post, intentalo nuevamente.`,
+        message: `Ha surgido un error al intentar crear el post. Inténtalo nuevamente`,
         duration: 5000,
       });
       await toast.present();
@@ -76,7 +135,7 @@ export class PostPage implements OnInit {
 
   private async actualizarPost() {
     const post = this.form.value;
-    this.postFacades.update(post).pipe(
+    this.postsFacade.update(post).pipe(
       take(1),
     ).subscribe(async (success) => {
       const toast = await this.toastCtrl.create({
