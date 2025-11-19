@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss'],
   standalone: false,
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   public appPages = [
     { title: 'Login', url: '/login', icon: 'log-in' },
     { title: 'Feed', url: '/feed', icon: 'list' },
@@ -18,5 +18,27 @@ export class AppComponent {
     { title: 'Spam', url: '/folder/spam', icon: 'warning' },
   ];
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+  public isDarkMode = false;
+
   constructor() { }
+
+  ngOnInit(): void {
+    const storedPreference = localStorage.getItem('dark-mode');
+    if (storedPreference !== null) {
+      this.isDarkMode = storedPreference === 'true';
+    } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      this.isDarkMode = true;
+    }
+    this.applyTheme();
+  }
+
+  onDarkModeToggle(enabled: boolean) {
+    this.isDarkMode = enabled;
+    localStorage.setItem('dark-mode', String(enabled));
+    this.applyTheme();
+  }
+
+  private applyTheme() {
+    document.body.classList.toggle('dark', this.isDarkMode);
+  }
 }

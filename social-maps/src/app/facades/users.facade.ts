@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { UsersRequest } from "../requests/users.request";
-import { from, Observable } from "rxjs";
+import { catchError, from, map, Observable, of } from "rxjs";
 import { UserModel } from "../models/user.models";
 
 @Injectable({
@@ -39,6 +39,21 @@ export class UsersFacade {
   }
 
   checkUserExists(email: string): Observable<boolean> {
-    return this.request.checkUserExists(email);
+    if (!email) {
+      return of(false);
+    }
+    return this.request.checkUserExists(email).pipe(
+      map((response: any) => {
+        const users = response?.data ?? response ?? [];
+        if (Array.isArray(users)) {
+          return users.some((user: any) => user?.email?.toLowerCase() === email.toLowerCase());
+        }
+        if (typeof users === 'object') {
+          return users?.email?.toLowerCase() === email.toLowerCase();
+        }
+        return false;
+      }),
+      catchError(() => of(false)),
+    );
   }
 }

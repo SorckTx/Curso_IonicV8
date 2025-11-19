@@ -16,21 +16,23 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class RegisterPage implements OnInit {
 
-  form: FormGroup = this.formBuilder.group({
-    nombre: new FormControl('', [Validators.required]),
-    apellidos: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
-    provincia: new FormControl('', []),
-    ciudad: new FormControl('', []),
-    fechaNacimiento: new FormControl('', []),
-  }, {
-    validators: UsernameValidator.usernameExists('email', this.usersFacade)
-  });
+  form!: FormGroup;
 
   constructor(private router: Router, private toastCtrl: ToastController, private formBuilder: FormBuilder, private usersFacade: UsersFacade, private fireAuth: AngularFireAuth, private authService: AuthService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.form = this.formBuilder.group({
+      nombre: new FormControl('', [Validators.required]),
+      apellidos: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [Validators.required]),
+      provincia: new FormControl('', []),
+      ciudad: new FormControl('', []),
+      fechaNacimiento: new FormControl('', []),
+    }, {
+      asyncValidators: UsernameValidator.usernameExists('email', this.usersFacade)
+    });
+  }
 
   async crearCuenta(e: Event) {
     if (this.form.invalid) {
